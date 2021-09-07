@@ -1,0 +1,60 @@
+/*************************************************
+ * Background CSS
+ **************************************************/
+body {
+	background-color: #000;
+	overflow: hidden;
+	color: white;
+	font-family: Arial;
+}
+
+div.content {
+	min-width: 1200px;
+	/*width: 90%;*/
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+canvas#game {
+	width: 800px;
+	height: 600px;
+	background-color: white;
+	float: left;
+}
+
+canvas#chat {
+	background-color: #6534D2;
+	margin-left: 15px;
+	width: 380px;
+	height: 600px;
+	float: left;
+}
+
+canvas#hero {
+	background-color: #efe4b0;
+	margin-top: 15px;
+	width: 380px;
+	height: 200px;
+	float: left;
+}
+
+canvas#items {
+	background-color: #efe4b0;
+	margin-top: 15px;
+	margin-left: 15px;
+	width: 450px;
+	height: 200px;
+	float: left;
+}
+
+canvas#gems {
+	background-color: #efe4b0;
+	margin-top: 15px;
+	margin-left: 15px;
+	width: 335px;
+	height: 200px;
+	float: left;
+}
