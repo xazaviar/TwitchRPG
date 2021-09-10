@@ -1,0 +1,65 @@
+[
+	{
+		"id": 0,
+		"type": "NORMAL",
+		"region": "FIELD",
+		"subregion": null,
+		"monsters":[0,0]
+	},
+	{
+		"id": 1,
+		"type": "NORMAL",
+		"region": "FIELD",
+		"subregion": null,
+		"monsters":[2,1]
+	},
+	{
+		"id": 2,
+		"type": "NORMAL",
+		"region": "FIELD",
+		"subregion": null,
+		"monsters":[0,2]
+	},
+	{
+		"id": 3,
+		"type": "SPECIAL",
+		"region": "FIELD",
+		"subregion": null,
+		"monsters":[1,1,1]
+	},
+	{
+		"id": 4,
+		"type": "NORMAL",
+		"region": "FIELD",
+		"subregion": "DUNGEON",
+		"monsters":[0,0,0]
+	},
+	{
+		"id": 5,
+		"type": "NORMAL",
+		"region": "FIELD",
+		"subregion": "DUNGEON",
+		"monsters":[1,1]
+	},
+	{
+		"id": 6,
+		"type": "SPECIAL",
+		"region": "FIELD",
+		"subregion": "DUNGEON",
+		"monsters":[1,1,2]
+	},
+	{
+		"id": 7,
+		"type": "BOSS",
+		"region": "FIELD",
+		"subregion": "DUNGEON",
+		"monsters":[3]
+	},
+	{
+		"id": 8,
+		"type": "SPECIAL",
+		"region": "FIELD",
+		"subregion": null,
+		"monsters":[4]
+	}
+]

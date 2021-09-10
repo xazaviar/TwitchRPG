@@ -24,6 +24,7 @@ function Drawing() {
     this.startWaitFrame = 0;
     this.voteTimer = 0;
     this.arrowOn = false;
+    this.inCombat = false;
 
     //Chat
     this.chatlog = [];
@@ -86,7 +87,7 @@ Drawing.prototype.animateGame = function(ctx){
     } 
 
     //Draw the background
-    drawBackground(ctx, w, h, this.imageLibrary, this.currentScene);
+    drawBackground(ctx, w, h, this.imageLibrary, this.currentScene, this.inCombat);
 
     //Draw Dialog Box
     if(this.canDrawDialogBox && this.dialog.text!=null){
@@ -374,8 +375,14 @@ function drawVoteTimer(ctx, w, h, time){
     ctx.fill();
 }
 
-function drawBackground(ctx, w, h, imageLibrary, scene){
+function drawBackground(ctx, w, h, imageLibrary, scene, combat){
     //TODO: Make this better and more interactive when selecting scenes
+
+    //Clear background
+    ctx.beginPath();
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0,0,w,h);
+    ctx.fill();
 
     if(scene.id == -9999){
         ctx.beginPath();
@@ -406,11 +413,13 @@ function drawBackground(ctx, w, h, imageLibrary, scene){
     }
     else if(scene.subregion!="DUNGEON"){
         ctx.beginPath();
-        ctx.drawImage(imageLibrary.field.image,0,0);
+        if(combat) ctx.drawImage(imageLibrary.field_combat.image,0,0);
+        else ctx.drawImage(imageLibrary.field.image,0,0);
         ctx.fill();
     }else{
         ctx.beginPath();
-        ctx.drawImage(imageLibrary.dungeon.image,0,0);
+        if(combat) ctx.drawImage(imageLibrary.dungeon_combat.image,0,0);
+        else ctx.drawImage(imageLibrary.dungeon.image,0,0);
         ctx.fill();
     }
 }
@@ -422,6 +431,13 @@ function drawBackground(ctx, w, h, imageLibrary, scene){
 //***********************************************************************
 Drawing.prototype.receiveNewScene = function(scene){
     if(this.newScene == null) this.newScene = scene;
+}
+
+Drawing.prototype.receiveCombatUpdate = function(combat){
+    if(combat){
+        this.dialog = null;
+    }
+    this.inCombat = combat;
 }
 
 Drawing.prototype.receiveVoteUpdate = function(vote){
@@ -486,6 +502,22 @@ Drawing.prototype.loadImages = function(){
     this.imageLibrary["field"] ={
         "type": "background",
         "name": "field",
+        "image": tempImg
+    };
+
+    var tempImg = new Image;
+    tempImg.src = "/images/backgrounds/field_combat.png";
+    this.imageLibrary["field_combat"] = {
+        "type": "background",
+        "name": "field_combat",
+        "image": tempImg
+    };
+
+    var tempImg = new Image;
+    tempImg.src = "/images/backgrounds/dungeon_combat.jpg";
+    this.imageLibrary["dungeon_combat"] = {
+        "type": "background",
+        "name": "dungeon_combat",
         "image": tempImg
     };
 

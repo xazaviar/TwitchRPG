@@ -68,6 +68,9 @@ $(document).ready(function() {
         draw.itemCanvas(itemCanvas.getContext("2d"), data);
     });
 
+    socket.on('combat-update', function(data){
+        draw.receiveCombatUpdate(data);
+    });
     // socket.emit('request-scene');
 
 
