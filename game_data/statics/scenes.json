@@ -1,0 +1,693 @@
+[{
+	"id": -9999,
+	"region": null,
+	"subregion": null,
+	"type": "END",
+	"subtype": null,
+	"combat": false,
+	"encounter_id": null,
+	"dialog": null,
+	"background": null,
+	"linked": null,
+	"startingPool": false,
+	"NPC": null,
+	"decision": null
+},
+{
+	"id": -9998,
+	"region": null,
+	"subregion": null,
+	"type": "END",
+	"subtype": null,
+	"combat": false,
+	"encounter_id": null,
+	"dialog": "__PLAYERNAME__'s journey has ended.",
+	"background": null,
+	"linked": null,
+	"startingPool": false,
+	"NPC": null,
+	"decision": null
+},
+{
+	"id": -1,
+	"region": null,
+	"subregion": null,
+	"type": "SPECIAL",
+	"subtype": null,
+	"combat": false,
+	"encounter_id": null,
+	"dialog": "Who should adventure forth for glory?",
+	"background": "campfire.png",
+	"linked": null,
+	"startingPool": false,
+	"NPC": null,
+	"decision": [
+		{
+			"id": "A",
+			"text": "Swordsman",
+			"keyword": "Swordsman",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "The journey will be long and hard. May your sword act as your guide.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "B",
+			"text": "Rogue",
+			"keyword": "Rogue",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "The journey will be long and hard. May your wit act as your guide.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "C",
+			"text": "Wizard",
+			"keyword": "Wizard",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "The journey will be long and hard. May your magic act as your guide.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		}
+	]
+},
+{
+	"id": 0,
+	"region": "FIELD",
+	"subregion": null,
+	"type": "NORMAL",
+	"subtype": null,
+	"combat": true,
+	"encounter_id": null,
+	"dialog": [
+		"As you travel down the road you are attacked by wandering monsters.",
+		"You find your mind wandering aimlessly as you continue your journey. Then all of a sudden you bump into some monsters. Both you and them are surprised, but they decide to attack you regardless.",
+		"As you run across the plains and some monsters start to chase you. You decide to stop and remove the nuisances.",
+		"You hear some monsters up the road. You decide to set up an ambush.",
+		"You get turned around and start heading the wrong way. Very quickly you realize your mistake as you see some threats coming towards you.",
+		"You hear a small group of monsters. You lock eyes and start to charge."
+	],
+	"background": null,
+	"linked": null,
+	"startingPool": true,
+	"NPC": null,
+	"decision": null
+},
+{
+	"id": 1,
+	"region": "FIELD",
+	"subregion": null,
+	"type": "SPECIAL",
+	"subtype": "FORK",
+	"combat": false,
+	"dialog": "You come to a fork in the road...",
+	"background": null,
+	"linked": null,
+	"startingPool": true,
+	"NPC": null,
+	"encounter_id": null,
+	"decision": [
+		{
+			"id": "A",
+			"text": "Take the long way.",
+			"keyword": "long",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You choose to take the long way.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "B",
+			"text": "Take the shortcut.",
+			"keyword": "short",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You choose to take the shortcut.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		}
+	]
+},
+{
+	"id": 2,
+	"region": "FIELD",
+	"subregion": null,
+	"type": "SPECIAL",
+	"subtype": "NPC",
+	"combat": false,
+	"dialog": "You see a fallen tree blocking the road...",
+	"background": null,
+	"linked": [4],
+	"startingPool": false,
+	"NPC": {
+		"model":"TREE",
+		"name":"TREE"
+	},
+	"encounter_id": null,
+	"decision": [
+		{
+			"id": "A",
+			"text": "Try to move the tree.",
+			"keyword": "move",
+			"results": [
+				{
+					"weight": 0.6,
+					"dialog": "You are ambushed by bandits!",
+					"combat": true,
+					"encounter_id": 3,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				},
+				{
+					"weight": 0.4,
+					"dialog": "You remove the tree and continue on your way.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+
+			]
+		},
+		{
+			"id": "B",
+			"text": "Go around the tree.",
+			"keyword": "Go",
+			"results": [
+				{
+					"weight": 0.1,
+					"dialog": "You try to leave but you walk into an ambush.",
+					"combat": true,
+					"encounter_id": 3,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				},
+				{
+					"weight": 0.9,
+					"dialog": "You decide to not hang around and continue on your way.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		}
+	]
+},
+{
+	"id": 3,
+	"region": "FIELD",
+	"subregion": null,
+	"type": "SPECIAL",
+	"subtype": null,
+	"combat": false,
+	"dialog": "You happen upon a glade...",
+	"background": null,
+	"linked": null,
+	"startingPool": true,
+	"NPC": null,
+	"encounter_id": null,
+	"decision": [
+		{
+			"id": "A",
+			"text": "Search the area",
+			"keyword": "Search",
+			"results": [
+				{
+					"weight": 0.5,
+					"dialog": "You find some gold.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 5,
+					"expChange": 0,
+					"itemChange": null
+				},
+				{
+					"weight": 0.5,
+					"dialog": "You find nothing of interest.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "B",
+			"text": "Make camp",
+			"keyword": "camp",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You decide to make camp and rest for the night.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 3,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		}
+	]
+},
+{
+	"id": 4,
+	"region": "FIELD",
+	"subregion": null,
+	"type": "SPECIAL",
+	"subtype": "NPC",
+	"combat": false,
+	"dialog": "You see a travelling merchant up ahead...",
+	"background": null,
+	"linked": null,
+	"startingPool": false,
+	"NPC": {
+		"model": "MERCHANT",
+		"name": "Bill"
+	},
+	"encounter_id": null,
+	"decision": [
+		{
+			"id": "A",
+			"text": "Talk with the merchant",
+			"keyword": "Talk",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You talk with the merchant about your travels. The merchant mentions that there was a troublesome tree on the path and bandits laying in wait. He said he would pay any adventurer for removing the problem. You mention that you actually encountered that same thing and successfully remove the fallen tree. The merchant is overjoyed and gives you some gold for the troubles.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 3,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "B",
+			"text": "Attempt to rob the merchant",
+			"keyword": "rob",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You attempt to get the jump on the merchant, but it seems they won't go down easy.",
+					"combat": true,
+					"encounter_id": 8,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		}
+	]
+},
+{
+	"id": 5,
+	"region": "FIELD",
+	"subregion": null,
+	"type": "SPECIAL",
+	"subtype": "MERCHANT",
+	"combat": false,
+	"encounter_id": null,
+	"dialog": "You see a travelling merchant up ahead. You decide to browse their wares...",
+	"background": null,
+	"linked": null,
+	"startingPool": true,
+	"NPC": {
+		"model": "MERCHANT",
+		"name": "Bill"
+	},
+	"decision": [
+		{
+			"id": "A",
+			"text": "Buy __ITEM__",
+			"keyword": "item",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You decide to purchase the __ITEM__ and go on your way.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "B",
+			"text": "Buy __ITEM__",
+			"keyword": "item",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You decide to purchase the __ITEM__ and go on your way.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "C",
+			"text": "Buy food",
+			"keyword": "food",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You take a moment to eat some food and go on your way.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 3,
+					"goldChange": -5,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "D",
+			"text": "Leave",
+			"keyword": "Leave",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You decide that you are not interested and go on your way.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		}
+
+	]
+},
+{
+	"id": 9,
+	"region": "FIELD",
+	"subregion": null,
+	"type": "END",
+	"subtype": null,
+	"combat": false,
+	"encounter_id": null,
+	"dialog": "You have finally come to this realm's dungeon. Before entering you may take a moment to prepare yourself.",
+	"background": null,
+	"linked": null,
+	"startingPool": false,
+	"NPC": null,
+	"decision": [
+		{
+			"id": "A",
+			"text": "Recover health.",
+			"keyword": "Recover",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You take a moment to recover some health.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 3,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "B",
+			"text": "Reflect on journey",
+			"keyword": "Reflect",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You take a moment to reflect on your journey. You feel you have learned from the experience.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 5,
+					"itemChange": null
+				}
+			]
+		}
+	]
+},
+{
+	"id": 10,
+	"region": "FIELD",
+	"subregion": "DUNGEON",
+	"type": "NORMAL",
+	"subtype": null,
+	"combat": true,
+	"encounter_id": null,
+	"dialog": [
+		"You enter a room occupied by guards. You prepare for combat.",
+		"You open a door in your search for the boss room. Unfortunately you chose the wrong door.",
+		"You start to run and end up tripping over loose cobblestone. As you stand back up, you notice that guards have gathered around you.",
+		"You are sneaking around and hear some guards up ahead. It's best to kill them now before they cause anymore trouble.",
+		"You start to wonder if you will ever find what you are looking for. Before you can begin to really contemplate your life decisions you are ambushed by guards.",
+		"You keep trying to sneak around, but unfortunately you are dummy thicc. And the clap of your asscheeks have alerted the guards."
+	],
+	"background": null,
+	"linked": null,
+	"startingPool": true,
+	"NPC": null,
+	"decision": null
+},
+{
+	"id": 11,
+	"region": "FIELD",
+	"subregion": "DUNGEON",
+	"type": "SPECIAL",
+	"subtype": "NPC",
+	"combat": false,
+	"encounter_id": null,
+	"dialog": "You find some prisoners...",
+	"background": null,
+	"linked": null,
+	"startingPool": true,
+	"NPC": {
+		"model": "PRISONER",
+		"name": "Karen"
+	},
+	"decision": [
+		{
+			"id": "A",
+			"text": "Free them",
+			"keyword": "Free",
+			"results": [
+				{
+					"weight": 0.25,
+					"dialog": "It was a trap! The 'prisoners' have started attacking you.",
+					"combat": true,
+					"encounter_id": 6,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				},
+				{
+					"weight": 0.75,
+					"dialog": "The prisoners thank you and give you some gold they have gathered.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 5,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "B",
+			"text": "Interrogate them",
+			"keyword": "Interrogate",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You learn that this dungeon is controlled by __BOSSNAME__.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "C",
+			"text": "Kill them",
+			"keyword": "Kill",
+			"results": [
+				{
+					"weight": 1,
+					"dialog": "You slay the prisoners and find a few pieces of gold.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 2,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		}
+
+	]
+},
+{
+	"id": 12,
+	"region": "FIELD",
+	"subregion": "DUNGEON",
+	"type": "SPECIAL",
+	"subtype": null,
+	"combat": false,
+	"dialog": "You come to an open room...",
+	"background": null,
+	"linked": null,
+	"startingPool": true,
+	"NPC": null,
+	"encounter_id": null,
+	"decision": [
+		{
+			"id": "A",
+			"text": "Search the room",
+			"keyword": "Search",
+			"results": [
+				{
+					"weight": 0.25,
+					"dialog": "You find a trip wire and disarm it.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 2,
+					"itemChange": null
+				},
+				{
+					"weight": 0.5,
+					"dialog": "You find an ambush laying in wait.",
+					"combat": true,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				},
+				{
+					"weight": 0.25,
+					"dialog": "You find some gold.",
+					"combat": true,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 3,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		},
+		{
+			"id": "B",
+			"text": "Move to the next room",
+			"keyword": "Move",
+			"results": [
+				{
+					"weight": 0.5,
+					"dialog": "You accidently set off a trap and take damage.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": -2,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				},
+				{
+					"weight": 0.5,
+					"dialog": "You move on quietly to the next room.",
+					"combat": false,
+					"encounter_id": null,
+					"hpChange": 0,
+					"goldChange": 0,
+					"expChange": 0,
+					"itemChange": null
+				}
+			]
+		}
+	]
+},
+{
+	"id": 13,
+	"region": "FIELD",
+	"subregion": "DUNGEON",
+	"type": "END",
+	"subtype": null,
+	"combat": true,
+	"encounter_id": 7,
+	"dialog": "You enter a large room where a single, large enemy is standing... BLAH BLAH BLAH Fight time bitch.",
+	"background": null,
+	"linked": null,
+	"startingPool": false,
+	"NPC": null,
+	"decision": null
+}
+]

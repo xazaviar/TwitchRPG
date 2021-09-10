@@ -1,0 +1,9 @@
+[
+	{
+		"name": "FIELD",
+		"size": 5,
+		"variance": 2,
+		"dungeonSize": 3,
+		"dungonVariance": 1
+	}
+]

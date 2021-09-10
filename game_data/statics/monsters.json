@@ -1,0 +1,67 @@
+[
+{
+	"id": 0,
+	"type": "NORMAL",
+	"name": "Green Slime",
+	"hp": 1,
+	"attack": 1,
+	"shield": 0,
+	"speed": 4,
+	"st_special": 0,
+	"exp": 1,
+	"gold": 0,
+	"specials":[]
+},
+{
+	"id": 1,
+	"type": "NORMAL",
+	"name": "Bandit",
+	"hp": 2,
+	"attack": 1,
+	"shield": 0,
+	"speed": 4,
+	"st_special": 0,
+	"exp": 1,
+	"gold": 1,
+	"specials":[]
+},
+{
+	"id": 2,
+	"type": "NORMAL",
+	"name": "Wolf",
+	"hp": 1,
+	"attack": 1,
+	"shield": 0,
+	"speed": 6,
+	"st_special": 0,
+	"exp": 1,
+	"gold": 0,
+	"specials":[]
+},
+{
+	"id": 3,
+	"type": "BOSS",
+	"name": "Orc Chieftan",
+	"hp": 6,
+	"attack": 2,
+	"shield": 0,
+	"speed": 2,
+	"st_special": 0,
+	"exp": 5,
+	"gold": 5,
+	"specials":[]
+},
+{
+	"id": 4,
+	"type": "SPECIAL",
+	"name": "Merchant",
+	"hp": 3,
+	"attack": 2,
+	"shield": 1,
+	"speed": 4,
+	"st_special": 0,
+	"exp": 3,
+	"gold": 5,
+	"specials":[]
+}
+]

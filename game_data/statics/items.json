@@ -1,0 +1,112 @@
+[
+{
+	"id": 0,
+	"name": "Smoke Screen",
+	"keyword": "NULL",
+	"type": "PASSIVE",
+	"price": 15,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "BOSS",
+	"starting": false
+},
+{
+	"id": 1,
+	"name": "Channel Stone",
+	"keyword": "NULL",
+	"type": "PASSIVE",
+	"price": 15,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "BOSS",
+	"starting": false
+},
+{
+	"id": 2,
+	"name": "Turtle Shell",
+	"keyword": "NULL",
+	"type": "PASSIVE",
+	"price": 15,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "BOSS",
+	"starting": false
+},
+{
+	"id": 3,
+	"name": "Power Gauntlet",
+	"keyword": "NULL",
+	"type": "PASSIVE",
+	"price": 10,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "ALL",
+	"starting": true
+},
+{
+	"id": 4,
+	"name": "Hearty Breakfast",
+	"keyword": "NULL",
+	"type": "PASSIVE",
+	"price": 10,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "ALL",
+	"starting": true
+},
+{
+	"id": 5,
+	"name": "Mix Tape",
+	"keyword": "NULL",
+	"type": "PASSIVE",
+	"price": 10,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "ALL",
+	"starting": true
+},
+{
+	"id": 6,
+	"name": "Book of Learning",
+	"keyword": "Learning",
+	"type": "PASSIVE",
+	"price": 10,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "ALL",
+	"starting": true
+},
+{
+	"id": 7,
+	"name": "Potion",
+	"keyword": "NULL",
+	"type": "ACTIVE",
+	"price": 5,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "SHOP",
+	"starting": true
+},
+{
+	"id": 8,
+	"name": "Bomb",
+	"keyword": "NULL",
+	"type": "ACTIVE",
+	"price": 10,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "ALL",
+	"starting": true
+},
+{
+	"id": 9,
+	"name": "Power Stone",
+	"keyword": "NULL",
+	"type": "ACTIVE",
+	"price": 10,
+	"singleUse": null,
+	"rechargeRate": null,
+	"pool": "ALL",
+	"starting": true
+}
+]
