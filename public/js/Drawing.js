@@ -10,10 +10,14 @@ function Drawing() {
     this.waitFrames = 20;
     this.arrowBlinkRate = 10;
 
+
+    //Main Data
     this.frameID = 0;
     this.currentScene = null;
     this.newScene = null;
     this.hero = null;
+    this.combatResults = null;
+    this.crIndex = 0;
 
     //Flags
     this.canChangeScene = true;
@@ -29,6 +33,10 @@ function Drawing() {
     //Chat
     this.chatlog = [];
     this.maxChatLines = 37;
+
+    //Canvases
+    this.heroCanvas = null;
+    this.itemCanvas = null;
 
     this.loadImages();
 }
@@ -76,11 +84,12 @@ Drawing.prototype.animateGame = function(ctx){
         this.canChangeScene = false;
         this.currentScene = this.newScene;
         this.newScene = null;
-        this.dialog = {
-            "mark": 0,
-            "section": 0,
-            "text": textSpliter(this.currentScene.dialog, -1, 37, false)
-        }
+        if(!this.inCombat)
+            this.dialog = {
+                "mark": 0,
+                "section": 0,
+                "text": textSpliter(this.currentScene.dialog, -1, 37, false)
+            }
         this.completedDialog = false;
         this.completedResultsDialog = false;
         this.completedChoice = null;
@@ -91,6 +100,7 @@ Drawing.prototype.animateGame = function(ctx){
 
     //Draw Dialog Box
     if(this.canDrawDialogBox && this.dialog.text!=null){
+
         drawDialogBox(ctx, w, h, this.imageLibrary);
 
         if(this.frameID%this.dialogRate == 0) this.dialog.mark++;
@@ -127,15 +137,27 @@ Drawing.prototype.animateGame = function(ctx){
 
     }else if(this.currentScene.dialog==null) this.completedDialog = true;
 
+    //Check for special combat drawing
+    if(this.inCombat){
+        drawEncounter(ctx, w, h, this.encounter, this.imageLibrary, this.frameID);
+
+        if(this.combatResults!=null && this.completedDialog && this.frameID > this.startWaitFrame+this.waitFrames){
+            this.processCombatResults();
+        }
+    }
+
     //Draw Decision Options
-    if(this.completedDialog && this.frameID > this.startWaitFrame+this.waitFrames && this.currentScene.decision!=null){
-        drawOptions(ctx, w, h, this.currentScene.decision, this.completedChoice, this.currentScene.subtype=="MERCHANT", this.hero);
+    if(this.completedDialog && this.frameID > this.startWaitFrame+this.waitFrames && (this.currentScene.decision!=null || this.inCombat)){
+        if(this.inCombat)
+            drawOptions(ctx, w, h, this.combatDecisions, this.completedChoice, false, this.hero);
+        else
+            drawOptions(ctx, w, h, this.currentScene.decision, this.completedChoice, this.currentScene.subtype=="MERCHANT", this.hero);
 
         //Draw Timer
         if(this.completedChoice==null)
             drawVoteTimer(ctx, w, h, this.voteTimer);
 
-    }else if(this.currentScene.decision==null){
+    }else if(this.currentScene.decision==null && !this.inCombat){
         this.completedChoice = "FF";
         this.completedResultsDialog = true;
     } 
@@ -145,9 +167,15 @@ Drawing.prototype.animateGame = function(ctx){
     //console.log(this.completedDialog && this.completedChoice && this.completedResultsDialog)
 }
 
-Drawing.prototype.heroCanvas = function(ctx, hero){
-    this.hero = hero;
+Drawing.prototype.sceneDrawing = function(ctx){
 
+}
+
+Drawing.prototype.combatDrawing = function(ctx){
+
+}
+
+function drawHeroCanvas(ctx, hero){
     var w = $("canvas#hero").width(), 
         h = $("canvas#hero").height();
     var yStart = 0, yInc = 20, xPad = 5;
@@ -162,19 +190,20 @@ Drawing.prototype.heroCanvas = function(ctx, hero){
     ctx.font = yInc+"px Courier New";
 
     //Draw Stats
-    ctx.fillText(hero.name,                              xPad, yStart+=yInc);
-    ctx.fillText("LVL    : "+hero.lvl+" ["+hero.exp+"]", xPad, yStart+=yInc);
-    ctx.fillText("HP     : "+hero.hp+"/"+hero.maxhp,     xPad, yStart+=yInc);
-    ctx.fillText("SPECIAL: "+hero.special+"/5",          xPad, yStart+=yInc);
-    ctx.fillText("SHIELD : "+hero.shield,                xPad, yStart+=yInc);
-    ctx.fillText("ATK    : "+hero.atk,                   xPad, yStart+=yInc);
-    ctx.fillText("GOLD   : "+hero.gold,                  xPad, yStart+=yInc);
-    ctx.fillText("SCENES : "+hero.scenes,                xPad, yStart+=yInc);
+    ctx.fillText(hero.name,                               xPad, yStart+=yInc);
+    ctx.fillText("LVL    : "+hero.lvl+" ["+hero.exp+"]",  xPad, yStart+=yInc);
+    ctx.fillText("HP     : "+hero.hp+"/"+hero.maxhp,      xPad, yStart+=yInc);
+    ctx.fillText("SPECIAL: "+hero.special+"/5",           xPad, yStart+=yInc);
+    ctx.fillText("SHIELD : "+hero.shield,                 xPad, yStart+=yInc);
+    ctx.fillText("SPEED  : "+hero.speed,                  xPad, yStart+=yInc);
+    ctx.fillText("ATTACK : "+hero.attack,                 xPad, yStart+=yInc);
+    ctx.fillText("GOLD   : "+hero.gold,                   xPad, yStart+=yInc);
+    ctx.fillText("SCENES : "+hero.scenes,                 xPad, yStart+=yInc);
 
     ctx.fill();
 }
 
-Drawing.prototype.itemCanvas = function(ctx, hero){
+function drawItemCanvas(ctx, hero){
     var w = $("canvas#hero").width(), 
         h = $("canvas#hero").height();
     var yStart = 0, yInc = 20, xPad = 5;
@@ -408,19 +437,40 @@ function drawBackground(ctx, w, h, imageLibrary, scene, combat){
     }
     else if(scene.id == -1){
         ctx.beginPath();
-        ctx.drawImage(imageLibrary.campfire.image,0,0);
+        ctx.drawImage(imageLibrary["backgrounds"].campfire.image,0,0);
         ctx.fill();
     }
     else if(scene.subregion!="DUNGEON"){
         ctx.beginPath();
-        if(combat) ctx.drawImage(imageLibrary.field_combat.image,0,0);
-        else ctx.drawImage(imageLibrary.field.image,0,0);
+        if(combat) ctx.drawImage(imageLibrary["backgrounds"].field_combat.image,0,0);
+        else ctx.drawImage(imageLibrary["backgrounds"].field.image,0,0);
         ctx.fill();
     }else{
         ctx.beginPath();
-        if(combat) ctx.drawImage(imageLibrary.dungeon_combat.image,0,0);
-        else ctx.drawImage(imageLibrary.dungeon.image,0,0);
+        if(combat) ctx.drawImage(imageLibrary["backgrounds"].dungeon_combat.image,0,0);
+        else ctx.drawImage(imageLibrary["backgrounds"].dungeon.image,0,0);
         ctx.fill();
+    }
+}
+
+function drawEncounter(ctx, w, h, encounter, imageLibrary, frameID){
+    var sX = 0, sY = 200;
+    var spacing = w / encounter.monsters.length;
+
+    //Temp idea
+    var modelsUsed = [];
+
+    for(var m = encounter.monsters.length-1; m >-1 ; m--){
+        if(encounter.monsters[m].hp >0){
+            var img = imageLibrary.monsters[encounter.monsters[m].model];
+            var monWid = img.wid*img.scale, monHei = img.hei*img.scale;
+            var pX = spacing/2-monWid/2, pY = 150/2-monHei/2;
+
+            if(frameID%img.speed == 0 && !modelsUsed[encounter.monsters[m].model]) img.frame = (img.frame+1)%img.loop.length;
+            ctx.drawImage(img.image,img.loop[img.frame]*img.wid+img.xOff,img.hei*0,img.wid,img.hei, sX+pX+spacing*m,sY+pY,monWid,monHei);
+
+            modelsUsed[""+encounter.monsters[m].model] = true;
+        }
     }
 }
 
@@ -435,9 +485,46 @@ Drawing.prototype.receiveNewScene = function(scene){
 
 Drawing.prototype.receiveCombatUpdate = function(combat){
     if(combat){
+        //Update Flags
         this.dialog = null;
+        this.completedDialog = false;
+        this.completedResultsDialog = false;
+        this.completedChoice = null;
     }
     this.inCombat = combat;
+}
+
+Drawing.prototype.receiveCombatResults = function(data){
+    console.log(data);
+
+    this.completedChoice = data.option;
+    this.combatResults = data.results;
+    this.crIndex = 0;
+
+    //Process first dialog
+    this.processCombatResults();
+}
+
+Drawing.prototype.receiveEndCombatResults = function(data){
+    console.log(data);
+    this.dialog = {
+        "mark": 0,
+        "section": 0,
+        "text": textSpliter(data.dialog, -1, 37, false)
+    };
+    this.completedDialog = false;
+}
+
+Drawing.prototype.receiveStartCombat = function(data){
+    this.dialog = {
+        "mark": 0,
+        "section": 0,
+        "text": textSpliter(data.dialog, -1, 37, false)
+    };
+    this.completedDialog = false;
+    this.completedChoice = null;
+    this.encounter = data.encounter;
+    this.combatDecisions = data.decisions;
 }
 
 Drawing.prototype.receiveVoteUpdate = function(vote){
@@ -453,7 +540,7 @@ Drawing.prototype.receiveVoteResult = function(data){
         "mark": 0,
         "section": 0,
         "text": textSpliter(data.result.dialog, -1, 37, false)
-    }
+    };
 }
 
 Drawing.prototype.receiveStatics = function(data){
@@ -474,6 +561,12 @@ Drawing.prototype.receiveNewChatMessage = function(msg){
     }
 }
 
+Drawing.prototype.updateHero = function(hero){
+    this.hero = hero;
+    drawHeroCanvas(this.heroCanvas.getContext("2d"), hero);
+    drawItemCanvas(this.itemCanvas.getContext("2d"), hero);
+}
+
 //***********************************************************************
 //Onload Functions
 //***********************************************************************
@@ -482,9 +575,12 @@ Drawing.prototype.loadImages = function(){
 
 
     // Background images
+    this.imageLibrary["backgrounds"] = [];
+    this.imageLibrary["monsters"] = [];
+
     var tempImg = new Image;
     tempImg.src = "/images/backgrounds/campfire.png";
-    this.imageLibrary["campfire"] = {
+    this.imageLibrary["backgrounds"]["campfire"] = {
         "type": "background",
         "name": "campfire",
         "image": tempImg
@@ -492,14 +588,14 @@ Drawing.prototype.loadImages = function(){
 
     var tempImg = new Image;
     tempImg.src = "/images/backgrounds/dungeon.png";
-    this.imageLibrary["dungeon"] ={
+    this.imageLibrary["backgrounds"]["dungeon"] ={
         "type": "background",
         "name": "dungeon",
         "image": tempImg
     };
     var tempImg = new Image;
     tempImg.src = "/images/backgrounds/field.png";
-    this.imageLibrary["field"] ={
+    this.imageLibrary["backgrounds"]["field"] ={
         "type": "background",
         "name": "field",
         "image": tempImg
@@ -507,7 +603,7 @@ Drawing.prototype.loadImages = function(){
 
     var tempImg = new Image;
     tempImg.src = "/images/backgrounds/field_combat.png";
-    this.imageLibrary["field_combat"] = {
+    this.imageLibrary["backgrounds"]["field_combat"] = {
         "type": "background",
         "name": "field_combat",
         "image": tempImg
@@ -515,10 +611,76 @@ Drawing.prototype.loadImages = function(){
 
     var tempImg = new Image;
     tempImg.src = "/images/backgrounds/dungeon_combat.jpg";
-    this.imageLibrary["dungeon_combat"] = {
+    this.imageLibrary["backgrounds"]["dungeon_combat"] = {
         "type": "background",
         "name": "dungeon_combat",
         "image": tempImg
+    };
+
+
+    //Monster Images
+    var tempImg = new Image;
+    tempImg.src  = "/images/monsters/slime.png";
+    this.imageLibrary["monsters"]["slime"] = {
+        "type": "monster",
+        "model": "slime",
+        "image": tempImg,
+        "scale": 4,
+        "frame": 0,
+        "loop": [0,1,2,3,4,5,6,7,8,9],
+        "speed": 5,
+        "wid": 32,
+        "hei": 32,
+        "xOff": 0,
+        "yOff": 0
+    };
+
+    var tempImg = new Image;
+    tempImg.src  = "/images/monsters/bandit.png";
+    this.imageLibrary["monsters"]["bandit"] = {
+        "type": "monster",
+        "model": "bandit",
+        "image": tempImg,
+        "scale": 4,
+        "frame": 0,
+        "loop": [1,0,1,2],
+        "speed": 6,
+        "wid": 24,
+        "hei": 32,
+        "xOff": 7,
+        "yOff": 0
+    };
+
+    var tempImg = new Image;
+    tempImg.src  = "/images/monsters/wolf.png";
+    this.imageLibrary["monsters"]["wolf"] = {
+        "type": "monster",
+        "model": "wolf",
+        "image": tempImg,
+        "scale": .6,
+        "frame": 0,
+        "loop": [1,2,3,4,5,6],
+        "speed": 7,
+        "wid": 336,
+        "hei": 160,
+        "xOff": 10,
+        "yOff": 0
+    };
+
+    var tempImg = new Image;
+    tempImg.src  = "/images/monsters/orc.png";
+    this.imageLibrary["monsters"]["orc"] = {
+        "type": "monster",
+        "model": "orc",
+        "image": tempImg,
+        "scale": .5,
+        "frame": 0,
+        "loop": [0],
+        "speed": 6,
+        "wid": 220,
+        "hei": 220,
+        "xOff": 0,
+        "yOff": 0
     };
 
     //Character Images
@@ -532,7 +694,7 @@ Drawing.prototype.loadImages = function(){
 
     console.log("loaded Images");
 
-    // console.log(this.imageLibrary);
+    console.log(this.imageLibrary);
 }
 
 Drawing.prototype.correctCanvasSize = function(canvas, id){
@@ -545,6 +707,11 @@ Drawing.prototype.correctCanvasSize = function(canvas, id){
     canvas.style.width = w + "px";
     canvas.style.height = h + "px";
     canvas.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+}
+
+Drawing.prototype.loadCanvases = function(hero, item){
+    this.heroCanvas = hero;
+    this.itemCanvas = item;
 }
 
 //***********************************************************************
@@ -561,7 +728,6 @@ function pixel_ratio(ctx) {
 
     return dpr / bsr;
 }
-
 
 /*
  * Returns an array with the text split nicely by spaces. Should be run 1 time per 
@@ -612,4 +778,57 @@ function textSpliter(text, maxLines, maxLen, reverse){
 
 
     return array;
+}
+
+
+Drawing.prototype.processCombatResults = function(){
+    //Should always be formatted, dialog and what the dialog does
+
+    //Catch end case
+    if(this.crIndex>=this.combatResults.length){
+        this.crIndex = 0;
+        this.combatResults = null;
+        return;
+    }
+
+    //Dialog
+    if(this.combatResults[this.crIndex].type == "dialog"){
+        this.dialog = {
+            "mark": 0,
+            "section": 0,
+            "text": textSpliter(this.combatResults[this.crIndex].dialog, -1, 37, false)
+        };
+        this.completedDialog = false;
+
+        //Increment
+        this.crIndex++;
+    }
+
+    //Process text
+    else if(this.combatResults[this.crIndex].type == "result"){
+        if(this.combatResults[this.crIndex].id=="player"){
+            if(this.combatResults[this.crIndex].change=="death"){
+                //Death animation trigger?
+            }else if(this.combatResults[this.crIndex].change=="item"){
+                //Item animation trigger?
+            }else{
+                this.hero[""+this.combatResults[this.crIndex].change] += this.combatResults[this.crIndex].amt;
+            }
+            drawHeroCanvas(this.heroCanvas.getContext("2d"), this.hero);
+        }else{
+            if(this.combatResults[this.crIndex].change=="death"){
+                //Death animation trigger?
+            }else if(this.combatResults[this.crIndex].change=="item"){
+                //Item animation trigger?
+            }else{
+                this.encounter.monsters[this.combatResults[this.crIndex].id][""+this.combatResults[this.crIndex].change] += this.combatResults[this.crIndex].amt;
+            }
+        }
+
+        //Increment
+        this.crIndex++;
+
+        //Call process again
+        this.processCombatResults();
+    }
 }

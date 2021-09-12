@@ -15,6 +15,7 @@ $(document).ready(function() {
     draw.correctCanvasSize(heroCanvas, "hero");
     draw.correctCanvasSize(itemCanvas, "items");
     draw.correctCanvasSize(gemsCanvas, "gems");
+    draw.loadCanvases(heroCanvas,itemCanvas);
 
     var chatlog = [];
     var chatLogMaxLen = 35;
@@ -59,17 +60,28 @@ $(document).ready(function() {
     });
 
     socket.on('new-hero', function(data){
-        draw.heroCanvas(heroCanvas.getContext("2d"), data);
-        draw.itemCanvas(itemCanvas.getContext("2d"), data);
+        draw.updateHero(data);
     });
 
     socket.on('hero-update', function(data){
-        draw.heroCanvas(heroCanvas.getContext("2d"), data);
-        draw.itemCanvas(itemCanvas.getContext("2d"), data);
+        draw.updateHero(data);
     });
 
-    socket.on('combat-update', function(data){
+    socket.on('start-combat-data', function(data){
+        console.log(data);
+        draw.receiveStartCombat(data);
+    });
+
+    socket.on('combat-status', function(data){
         draw.receiveCombatUpdate(data);
+    });
+
+    socket.on('combat-result', function(data){
+        draw.receiveCombatResults(data);
+    });
+
+    socket.on('end-combat-result', function(data){
+        draw.receiveEndCombatResults(data);
     });
     // socket.emit('request-scene');
 

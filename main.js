@@ -87,10 +87,15 @@ io.on('connection', (socket) => {
 			"WAIT_FRAMES": parseInt(process.env.WAIT_FRAMES),
 			"DIALOG_SPEED": parseInt(process.env.DIALOG_SPEED),
 			"VOTING_TIME": parseInt(process.env.VOTING_TIME),
-			"COMBAT_DECISON": game.getCombatDecision()
+			"IN_COMBAT": game.isInCombat()
 		});
     	socket.emit('scene-update', game.getScene());
     	socket.emit('new-hero', game.getHero());
+
+    	if(game.isInCombat()){
+			socket.emit('combat-update', true);
+    		socket.emit('start-combat-data', game.combatData());
+    	}
 	} 
 
     socket.on('request-scene', () => {

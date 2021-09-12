@@ -85,7 +85,8 @@
 	"singleUse": null,
 	"rechargeRate": null,
 	"pool": "SHOP",
-	"starting": true
+	"starting": true,
+	"speed": 2
 },
 {
 	"id": 8,
@@ -96,7 +97,8 @@
 	"singleUse": null,
 	"rechargeRate": null,
 	"pool": "ALL",
-	"starting": true
+	"starting": true,
+	"speed": -3
 },
 {
 	"id": 9,
@@ -107,6 +109,7 @@
 	"singleUse": null,
 	"rechargeRate": null,
 	"pool": "ALL",
-	"starting": true
+	"starting": true,
+	"speed": -3
 }
 ]
