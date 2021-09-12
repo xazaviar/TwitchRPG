@@ -80,7 +80,7 @@ $(document).ready(function() {
         draw.receiveCombatResults(data);
     });
 
-    socket.on('end-combat-result', function(data){
+    socket.on('end-combat-results', function(data){
         draw.receiveEndCombatResults(data);
     });
     // socket.emit('request-scene');

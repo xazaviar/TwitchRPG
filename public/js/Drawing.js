@@ -495,7 +495,7 @@ Drawing.prototype.receiveCombatUpdate = function(combat){
 }
 
 Drawing.prototype.receiveCombatResults = function(data){
-    console.log(data);
+    // console.log(data);
 
     this.completedChoice = data.option;
     this.combatResults = data.results;
@@ -506,7 +506,7 @@ Drawing.prototype.receiveCombatResults = function(data){
 }
 
 Drawing.prototype.receiveEndCombatResults = function(data){
-    console.log(data);
+    // console.log(data);
     this.dialog = {
         "mark": 0,
         "section": 0,
